@@ -18,7 +18,7 @@ Node로 만든 실시간 캐치마인드 게임
 
 > npm run dev:server를 이용해 서버를 작동 시키자 발생한 에러  
 > ![img](./img/error_01.jpg)  
-> 해결방법[링크](https://takeknowledge.netlify.app/bugfix/cannot-use-import-statement-outside-a-module/) : package.json파일에 "type": "module" 작성해주기  
+> 해결방법/[링크](https://takeknowledge.netlify.app/bugfix/cannot-use-import-statement-outside-a-module/) : package.json파일에 "type": "module" 작성해주기  
 > ![img](./img/error_01_result.jpg)
 
 ### 2.2 Failed to lookup view "home" in views directory 에러
@@ -29,7 +29,7 @@ Node로 만든 실시간 캐치마인드 게임
 >
 > ![img](./img/error_02-1.jpg)  
 > 하지만 다시 에러가 발생 **dirname이 정의 되지 않았기에 에러가 발생  
-> 해결방법[링크](https://codenbike.tistory.com/221): ES6에서는 바로 쓰지않고 변수처리해서 사용하기에 발생하는 에러였기에 > const **dirname = path.resolve(); 변수처리하여 문제해결  
+> 해결방법/[링크](https://codenbike.tistory.com/221): ES6에서는 바로 쓰지않고 변수처리해서 사용하기에 발생하는 에러였기에 > const **dirname = path.resolve(); 변수처리하여 문제해결  
 > 하지만 다시 Failed to lookup view "home" in views directory 에러가 발생해서
 > app.set("views", path.join(**dirname, "views")); 코드를  
 > app.set("views", path.join(**dirname, "./src/views"));로 경로를 설정해주니 제대로 동작하게 되었음
