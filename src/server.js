@@ -2,7 +2,7 @@ import path from "path";
 import express from "express";
 import socketIO from "socket.io";
 
-const PORT = 4000;
+const PORT = 5000;
 const __dirname = path.resolve();
 const app = express();
 
@@ -15,4 +15,5 @@ const handleListening = () => {
   console.log(`Server running http://localhost:${PORT}`);
 };
 
+console.log("Hello!!");
 app.listen(PORT, handleListening);
