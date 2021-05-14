@@ -2,7 +2,7 @@ import path from "path";
 import express from "express";
 import socketIO from "socket.io";
 
-const PORT = 5000;
+const PORT = 4000;
 const __dirname = path.resolve();
 const app = express();
 
@@ -15,5 +15,6 @@ const handleListening = () => {
   console.log(`Server running http://localhost:${PORT}`);
 };
 
-console.log("Hello!!");
-app.listen(PORT, handleListening);
+const server = app.listen(PORT, handleListening);
+
+const io = socketIO(server); // WS는 서버와 같은 포트를 사용 가능하다.
