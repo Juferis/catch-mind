@@ -1,16 +1,15 @@
-import path from "path";
+import { join } from "path";
 import express from "express";
 import socketIO from "socket.io";
 import logger from "morgan";
 
 const PORT = 4000;
-const __dirname = path.resolve();
 const app = express();
 
 app.set("view engine", "pug");
-app.set("views", path.join(__dirname, "./src/views"));
+app.set("views", join(__dirname, "views"));
 app.use(logger("dev"));
-app.use(express.static(path.join(__dirname, "./src/static")));
+app.use(express.static(join(__dirname, "static")));
 app.get("/", (req, res) => res.render("home"));
 
 const handleListening = () => {
