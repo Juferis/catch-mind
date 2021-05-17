@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:server": "nodemon --exec babel-node src/server.js"
+    "dev:server": "nodemon --exec babel-node src/server.js",
+    "dev:assets": "gulp"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,11 @@
   "devDependencies": {
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-csso": "^4.0.1",
+    "gulp-sass": "^4.1.0",
+    "node-sass": "^6.0.0",
     "prettier": "^2.3.0"
   },
   "dependencies": {

@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
   socket.on("newMessage", ({ message }) => {
     socket.broadcast.emit("messageNotif", {
       message,
-      nickname: socket.nickname || "Anon",
+      nickname: socket.nickname || "Anonymous",
     });
   });
   socket.on("setNickname", ({ nickname }) => {
