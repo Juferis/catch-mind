@@ -7,6 +7,9 @@ html(lang="en")
         link(rel="stylesheet", href="styles/styles.css")
         title 캐치 마인드
     body 
-        h1 Hello!
+        div.loginBox#jsLogin
+            input(placeholder="닉네임을 정해주세요", type="text")
+        div.gameContainer#jsGame
+            h1 로그인 되어있습니다.
         script(src="/socket.io/socket.io.js")
         script(src="/js/main.js")
