@@ -7,8 +7,9 @@ const LOGGED_IN = "loggedIn";
 const nickname = localStorage.getItem(NICKNAME);
 
 const logIn = (nickname) => {
-  const socket = io("/"); // socket를 연결한다.
-  socket.emit("setNickname", nickname); // setNickname함수는 socketContrller.js에 있다.
+  // eslint-disable-next-line no-undef
+  window.socket = io("/"); // socket를 연결한다.
+  window.socket.emit(window.events.setNickname, nickname); // setNickname함수는 socketContrller.js에 있다.
 };
 
 const handleSubmitNickname = (event) => {
