@@ -1,3 +1,5 @@
+import { getSocket } from "./sockets";
+
 const messages = document.getElementById("jsMessages");
 const sendMsg = document.getElementById("jsSendMsg");
 
@@ -16,9 +18,14 @@ const handleSendMsg = (event) => {
   event.preventDefault();
   const input = sendMsg.querySelector("input");
   const { value } = input;
+  // 채팅을 입력하면 sendMsg라는 함수가 socketController.js에서 실해된다.
+  getSocket().emit(window.events.sendMsg, { message: value });
   input.value = "";
   appendMsg(value);
 };
+
+export const handleNewMessage = ({ message, nickname }) =>
+  appendMsg(message, nickname);
 
 if (sendMsg) {
   sendMsg.addEventListener("submit", handleSendMsg);

@@ -1,3 +1,4 @@
+import { handleNewMessage } from "./chat";
 import { handleDisconnected, handleNewUser } from "./notifications";
 
 let socket = null; // 처음 로드할 때 null값
@@ -12,4 +13,5 @@ export const initSockets = (aSocket) => {
   updateSocket(aSocket); // 소켓 전달
   aSocket.on(events.newUser, handleNewUser);
   aSocket.on(events.disconnected, handleDisconnected);
+  aSocket.on(events.newMsg, handleNewMessage);
 };
