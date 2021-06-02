@@ -1,6 +1,7 @@
 import { handleNewMessage } from "./chat";
 import { handleDisconnected, handleNewUser } from "./notifications";
 import { handleBeganPath, handleFilled, handleStrokedPath } from "./paint";
+import { handlePlayerUpdate } from "./players";
 
 let socket = null; // 처음 로드할 때 null값
 // login.js에서 initSockets(socket)에서 소켓 받아오기
@@ -18,4 +19,5 @@ export const initSockets = (aSocket) => {
   socket.on(events.beganPath, handleBeganPath);
   socket.on(events.strokedPath, handleStrokedPath);
   socket.on(events.filled, handleFilled);
+  socket.on(events.playerUpdate, handlePlayerUpdate);
 };

@@ -25,4 +25,5 @@ const server = app.listen(PORT, handleListening);
 
 const io = socketIO(server); // WS는 서버와 같은 포트를 사용 가능하다.
 
-io.on("connection", (socket) => socketController(socket));
+// sockey.io 서버는 현재 connected 상태인 모든 client들에게 event를 emit해줄 수 있다.
+io.on("connection", (socket) => socketController(socket, io));
