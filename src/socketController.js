@@ -1,7 +1,11 @@
 import events from "./events";
-import startGame from "./game";
+import { chooseWords } from "./word";
 
 let sockets = [];
+let inProgress = false;
+let word = null;
+
+const chooseLeader = () => sockets[Math.floor(Math.random() * sockets.length)];
 
 const socketController = (socket, io) => {
   const broadcast = (event, data) => socket.broadcast.emit(event, data);
@@ -11,17 +15,33 @@ const socketController = (socket, io) => {
   // socket들은 이벤트를 발생 시킨다.
   const sendPlayerUpdate = () =>
     superBroadcast(events.playerUpdate, { sockets });
+  const startGame = () => {
+    if (inProgress === false) {
+      inProgress = true;
+      const leader = chooseLeader();
+      word = chooseWords();
+      // 문제 출제자에게 알림
+      io.to(leader.id).emit(events.leaderNotif, { word });
+      setTimeout(() => superBroadcast(events.gameStarted), 2000);
+    }
+  };
+  const endGame = () => (inProgress = false);
 
   socket.on(events.setNickname, ({ nickname }) => {
     socket.nickname = nickname;
     sockets.push({ id: socket.id, score: 0, nickname });
     broadcast(events.newUser, { nickname });
     sendPlayerUpdate();
-    startGame(sockets);
+    if (sockets.length === 2) {
+      startGame();
+    }
   });
   socket.on(events.disconnect, () => {
     // 연결을 끊은 유저를 제외한 다른 유저들을 찾는다
     sockets = sockets.filter((aSocket) => aSocket.id !== socket.id);
+    if (sockets.length === 1) {
+      endGame();
+    }
     broadcast(events.disconnected, { nickname: socket.nickname });
     sendPlayerUpdate();
   });
