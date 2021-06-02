@@ -30,7 +30,6 @@ const beginPath = (offsetX, offsetY) => {
 
 const strokePath = (offsetX, offsetY, color) => {
   let currentColor = ctx.strokeStyle; // 현재 정해져 있는 색상
-  console.log(color);
   if (color !== undefined) {
     // 색상 데이터가 넘어 왔다면 색상 변경
     ctx.strokeStyle = color;
@@ -46,7 +45,7 @@ const handleMouseMove = (event) => {
   if (!painting) {
     beginPath(offsetX, offsetY);
     getSocket().emit(window.events.beginPath, { offsetX, offsetY });
-  } else {
+  } else if (!filling) {
     strokePath(offsetX, offsetY);
     getSocket().emit(window.events.strokePath, {
       offsetX,
@@ -56,9 +55,19 @@ const handleMouseMove = (event) => {
   }
 };
 
+const fill = (color) => {
+  let currentColor = ctx.fillStyle;
+  if (color !== undefined) {
+    ctx.fillStyle = color;
+  }
+  ctx.fillRect(0, 0, DEFAULT_SIZE, DEFAULT_SIZE);
+  ctx.fillStyle = currentColor;
+};
+
 const fillBackground = () => {
   if (filling) {
-    ctx.fillRect(0, 0, 700, 700);
+    fill();
+    getSocket().emit(window.events.fill, { color: ctx.fillStyle });
   }
 };
 
@@ -103,3 +112,4 @@ export const handleBeganPath = ({ offsetX, offsetY }) =>
   beginPath(offsetX, offsetY);
 export const handleStrokedPath = ({ offsetX, offsetY, color }) =>
   strokePath(offsetX, offsetY, color);
+export const handleFilled = ({ color }) => fill(color);
