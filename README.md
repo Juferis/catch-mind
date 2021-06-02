@@ -10,7 +10,8 @@ Node로 만든 실시간 캐치마인드 게임
 > socket.io v4.1.1  
 > pug v3.0.2  
 > ESLint v7.26.0  
-> Gulp v4.0.2
+> Gulp v4.0.2  
+> [paintJS](https://github.com/Juferis/paintjs)  
 
 <br>
 
