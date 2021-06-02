@@ -1,3 +1,5 @@
+import { getSocket } from "./sockets";
+
 const canvas = document.getElementById("jsCanvas");
 const colors = document.getElementsByClassName("jsColor");
 const modeBtn = document.getElementById("jsMode");
@@ -26,6 +28,8 @@ const handleMouseMove = (event) => {
   if (!painting) {
     ctx.beginPath();
     ctx.moveTo(offsetX, offsetY);
+    // path를 지정하면 서버로 값을 전해준다
+    getSocket();
   } else {
     ctx.lineTo(offsetX, offsetY);
     ctx.stroke();
