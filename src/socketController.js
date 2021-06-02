@@ -1,4 +1,5 @@
 import events from "./events";
+import startGame from "./game";
 
 let sockets = [];
 
@@ -16,6 +17,7 @@ const socketController = (socket, io) => {
     sockets.push({ id: socket.id, score: 0, nickname });
     broadcast(events.newUser, { nickname });
     sendPlayerUpdate();
+    startGame(sockets);
   });
   socket.on(events.disconnect, () => {
     // 연결을 끊은 유저를 제외한 다른 유저들을 찾는다
