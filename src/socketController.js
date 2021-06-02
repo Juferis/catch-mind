@@ -18,8 +18,8 @@ const socketController = (socket) => {
   socket.on(events.beginPath, ({ offsetX, offsetY }) => {
     broadcast(events.beganPath, { offsetX, offsetY });
   });
-  socket.on(events.strokePath, ({ offsetX, offsetY }) => {
-    broadcast(events.strokedPath, { offsetX, offsetY });
+  socket.on(events.strokePath, ({ offsetX, offsetY, color }) => {
+    broadcast(events.strokedPath, { offsetX, offsetY, color });
   });
 };
 

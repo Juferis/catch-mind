@@ -28,9 +28,16 @@ const beginPath = (offsetX, offsetY) => {
   ctx.moveTo(offsetX, offsetY);
 };
 
-const strokePath = (offsetX, offsetY) => {
+const strokePath = (offsetX, offsetY, color) => {
+  let currentColor = ctx.strokeStyle; // 현재 정해져 있는 색상
+  console.log(color);
+  if (color !== undefined) {
+    // 색상 데이터가 넘어 왔다면 색상 변경
+    ctx.strokeStyle = color;
+  }
   ctx.lineTo(offsetX, offsetY);
   ctx.stroke();
+  ctx.strokeStyle = currentColor; // 현재 정해져 있는 색상 최신화
 };
 
 const handleMouseMove = (event) => {
@@ -41,7 +48,11 @@ const handleMouseMove = (event) => {
     getSocket().emit(window.events.beginPath, { offsetX, offsetY });
   } else {
     strokePath(offsetX, offsetY);
-    getSocket().emit(window.events.strokePath, { offsetX, offsetY });
+    getSocket().emit(window.events.strokePath, {
+      offsetX,
+      offsetY,
+      color: ctx.strokeStyle,
+    });
   }
 };
 
@@ -90,5 +101,5 @@ if (modeBtn) {
 
 export const handleBeganPath = ({ offsetX, offsetY }) =>
   beginPath(offsetX, offsetY);
-export const handleStrokedPath = ({ offsetX, offsetY }) =>
-  strokePath(offsetX, offsetY);
+export const handleStrokedPath = ({ offsetX, offsetY, color }) =>
+  strokePath(offsetX, offsetY, color);
