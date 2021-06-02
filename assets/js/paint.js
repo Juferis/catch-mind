@@ -5,16 +5,17 @@ const colors = document.getElementsByClassName("jsColor");
 const modeBtn = document.getElementById("jsMode");
 const ctx = canvas.getContext("2d");
 
-canvas.width = document.getElementsByClassName("canvas")[0].offsetWidth;
-canvas.height = document.getElementsByClassName("canvas")[0].offsetHeight;
-
 const DEFAULT_COLOR = "#2c2c2c";
+const DEFAULT_SIZE = 700;
+
+canvas.width = DEFAULT_SIZE;
+canvas.height = DEFAULT_SIZE;
 
 let painting = false;
 let filling = false;
 
 ctx.fillStyle = "white";
-ctx.fillRect(0, 0, 700, 700);
+ctx.fillRect(0, 0, DEFAULT_SIZE, DEFAULT_SIZE);
 ctx.strokeStyle = DEFAULT_COLOR;
 ctx.fillStyle = DEFAULT_COLOR;
 ctx.lineWidth = 2.5;
@@ -22,17 +23,25 @@ ctx.lineWidth = 2.5;
 const stopPainting = () => (painting = false);
 const startPainting = () => (painting = true);
 
+const beginPath = (offsetX, offsetY) => {
+  ctx.beginPath();
+  ctx.moveTo(offsetX, offsetY);
+};
+
+const strokePath = (offsetX, offsetY) => {
+  ctx.lineTo(offsetX, offsetY);
+  ctx.stroke();
+};
+
 const handleMouseMove = (event) => {
   const offsetX = event.offsetX;
   const offsetY = event.offsetY;
   if (!painting) {
-    ctx.beginPath();
-    ctx.moveTo(offsetX, offsetY);
-    // path를 지정하면 서버로 값을 전해준다
-    getSocket();
+    beginPath(offsetX, offsetY);
+    getSocket().emit(window.events.beginPath, { offsetX, offsetY });
   } else {
-    ctx.lineTo(offsetX, offsetY);
-    ctx.stroke();
+    strokePath(offsetX, offsetY);
+    getSocket().emit(window.events.strokePath, { offsetX, offsetY });
   }
 };
 
@@ -78,3 +87,8 @@ Array.from(colors).forEach((color) =>
 if (modeBtn) {
   modeBtn.addEventListener("click", changeMode);
 }
+
+export const handleBeganPath = ({ offsetX, offsetY }) =>
+  beginPath(offsetX, offsetY);
+export const handleStrokedPath = ({ offsetX, offsetY }) =>
+  strokePath(offsetX, offsetY);

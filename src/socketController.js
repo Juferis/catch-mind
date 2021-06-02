@@ -15,6 +15,12 @@ const socketController = (socket) => {
   socket.on(events.sendMsg, ({ message }) => {
     broadcast(events.newMsg, { message, nickname: socket.nickname });
   });
+  socket.on(events.beginPath, ({ offsetX, offsetY }) => {
+    broadcast(events.beganPath, { offsetX, offsetY });
+  });
+  socket.on(events.strokePath, ({ offsetX, offsetY }) => {
+    broadcast(events.strokedPath, { offsetX, offsetY });
+  });
 };
 
 export default socketController;
