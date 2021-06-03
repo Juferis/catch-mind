@@ -5,6 +5,7 @@ let sockets = [];
 let inProgress = false;
 let word = null;
 let leader = null;
+let timeout = null;
 
 const chooseLeader = () => sockets[Math.floor(Math.random() * sockets.length)];
 
@@ -17,20 +18,40 @@ const socketController = (socket, io) => {
   const sendPlayerUpdate = () =>
     superBroadcast(events.playerUpdate, { sockets });
   const startGame = () => {
-    if (inProgress === false) {
-      inProgress = true;
-      leader = chooseLeader();
-      word = chooseWords();
-      // 문제 출제자에게 알림
-      setTimeout(() => {
-        superBroadcast(events.gameStarted);
-        io.to(leader.id).emit(events.leaderNotif, { word });
-      }, 2000);
+    if (sockets.length > 1) {
+      if (inProgress === false) {
+        inProgress = true;
+        leader = chooseLeader();
+        word = chooseWords();
+        superBroadcast(events.gameStarting);
+        // 문제 출제자에게 알림
+        setTimeout(() => {
+          superBroadcast(events.gameStarted);
+          io.to(leader.id).emit(events.leaderNotif, { word });
+          timeout = setTimeout(endGame, 30000);
+        }, 4000);
+      }
     }
   };
   const endGame = () => {
     inProgress = false;
     superBroadcast(events.gameEnded);
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+    setTimeout(() => startGame(), 2000);
+  };
+
+  const addScore = (id) => {
+    sockets = sockets.map((socket) => {
+      if (socket.id === id) {
+        socket.score += 10;
+      }
+      return socket;
+    });
+    sendPlayerUpdate();
+    endGame();
+    clearTimeout(timeout);
   };
 
   socket.on(events.setNickname, ({ nickname }) => {
@@ -38,9 +59,7 @@ const socketController = (socket, io) => {
     sockets.push({ id: socket.id, score: 0, nickname });
     broadcast(events.newUser, { nickname });
     sendPlayerUpdate();
-    if (sockets.length === 2) {
-      startGame();
-    }
+    startGame();
   });
   socket.on(events.disconnect, () => {
     // 연결을 끊은 유저를 제외한 다른 유저들을 찾는다
@@ -57,6 +76,13 @@ const socketController = (socket, io) => {
   });
   socket.on(events.sendMsg, ({ message }) => {
     broadcast(events.newMsg, { message, nickname: socket.nickname });
+    if (message === word) {
+      superBroadcast(events.newMsg, {
+        message: `${socket.nickname}님이 정답을 맞췄습니다!\n정답: ${word}`,
+        nickname: "Bot",
+      });
+      addScore(socket.id);
+    }
   });
   socket.on(events.beginPath, ({ offsetX, offsetY }) => {
     broadcast(events.beganPath, { offsetX, offsetY });

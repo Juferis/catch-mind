@@ -1,3 +1,4 @@
+import { disableChat, enableChat } from "./chat";
 import {
   disableCanvas,
   enableCanvas,
@@ -32,13 +33,17 @@ export const handleGameStarted = () => {
 export const handleLeaderNotif = ({ word }) => {
   enableCanvas();
   showControls();
+  disableChat();
   setNotifs("");
   notifs.innerText = `문제 출제자 입니다! 문제: ${word}`;
 };
 
 export const handleGameEnded = () => {
   setNotifs("게임이 종료되었습니다.");
+  enableChat();
   disableCanvas();
   hideControls();
   resetCanvas();
 };
+
+export const handleGameStarting = () => setNotifs("게임이 곧 시작됩니다.");
