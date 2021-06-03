@@ -107,9 +107,6 @@ export const handleStrokedPath = ({ offsetX, offsetY, color }) =>
 export const handleFilled = ({ color }) => fill(color);
 
 // 게임 시작 후 Canvas 사용 컨트롤
-export const hideControls = () => (controls.style.opacity = 0);
-export const showControls = () => (controls.style.opacity = 1);
-
 export const disableCanvas = () => {
   canvas.removeEventListener("mousemove", handleMouseMove);
   canvas.removeEventListener("mousedown", startPainting);
@@ -126,7 +123,11 @@ export const enableCanvas = () => {
   canvas.addEventListener("click", fillBackground);
 };
 
+export const hideControls = () => (controls.style.opacity = 0);
+export const showControls = () => (controls.style.opacity = 1);
+export const resetCanvas = () => fill("#fff");
+
 if (canvas) {
-  enableCanvas();
+  hideControls();
   canvas.addEventListener("contextmenu", handleCM);
 }
